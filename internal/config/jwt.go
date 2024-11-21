@@ -14,7 +14,6 @@ type JwtCredentialUtil struct {
 func (j *JwtCredentialUtil) GenerateToken(credential *dto.UserCredential) (dto.CredentialToken, error) {
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": credential.ID,
-		"role": credential.Role,
 	})
 
 	token, err := jwtToken.SignedString(j.key)

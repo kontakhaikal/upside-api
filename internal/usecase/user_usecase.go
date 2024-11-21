@@ -54,7 +54,6 @@ func (u *UserUseCaseImpl) Register(ctx context.Context, req *dto.RegisterUserReq
 		LastName: req.LastName,
 		Username: req.Username,
 		Password: hashedPassword,
-		Role: entity.CUSTOMER,
 	}
 
 	user, err = u.userRepository.Save(repoCtx, user)
@@ -81,8 +80,7 @@ func (u *UserUseCaseImpl) Login(ctx context.Context, req *dto.LoginUserRequest) 
 
 	credential, err := u.credetialUtil.GenerateToken(
 		&dto.UserCredential{
-			ID: user.ID.String(),
-			Role: string(user.Role),
+			ID: user.ID,
 		},
 	)
 

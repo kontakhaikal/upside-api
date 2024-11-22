@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/fkrhykal/upside-api/internal/entity"
 	"gorm.io/gorm"
 )
@@ -23,6 +25,8 @@ func (g *GormUserRepository) UsernameExist(ctx Context[*gorm.DB], username strin
 		return false, err
 	}
 
+
+
 	return count != 0, nil
 }
 
@@ -35,13 +39,19 @@ func (g *GormUserRepository) Save(ctx Context[*gorm.DB], user *entity.User) (*en
 }
 
 func (g *GormUserRepository) FindByUsername(ctx Context[*gorm.DB], username string) (*entity.User, error) {
-	user := entity.User{}
+	user := new(entity.User)
 
-	if err := ctx.Executor().First(&user, "username = ?", username).Error; err != nil {
-		return nil, err
+	err := ctx.Executor().First(&user, "username = ?", username).Error
+
+	if err == nil {
+		return user, nil
+	}
+	
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
 	}
 
-	return &user, nil
+	return nil, err
 }
 
 func NewGormUserRepository() UserRepository[*gorm.DB] {

@@ -10,9 +10,9 @@ var Admin Role = "admin"
 
 var Member Role = "member"
 
-type MemberShip struct {
-	ID uuid.UUID
-	UserID uuid.UUID
-	Side uuid.UUID
-	Role
+type Membership struct {
+	ID uuid.UUID	`gorm:"column:id;primaryKey"`
+	UserID uuid.UUID	`gorm:"column:user_id"`
+	SideID uuid.UUID	`gorm:"column:side_id"`
+	Role Role	`gorm:"column:role"`
 }

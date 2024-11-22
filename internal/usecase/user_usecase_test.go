@@ -15,14 +15,14 @@ import (
 )
 
 
-type dependency struct {
+type userUseCaseDep struct {
 	repository repository.UserRepository[*gorm.DB]
 	useCase usecase.UserUseCase
 	db *gorm.DB
 	ctxManager repository.ContextManager[*gorm.DB]
 }
 
-func setup(t *testing.T) *dependency {
+func setupUserUseCase(t *testing.T) *userUseCaseDep {
 	db, err := gorm.Open(sqlite.Open("file:test?mode=memory&cache=shared"))
 
 	if err != nil {
@@ -46,7 +46,7 @@ func setup(t *testing.T) *dependency {
 		credentialUtil,
 	)
 
-	return &dependency{
+	return &userUseCaseDep{
 		repository: userRepository,
 		useCase: useCase,
 		db: db,
@@ -57,7 +57,7 @@ func setup(t *testing.T) *dependency {
 
 func TestRegisterUserUseCase(t *testing.T) {
 	
-	dep := setup(t)
+	dep := setupUserUseCase(t)
 
 	ctx := context.TODO()
 
@@ -86,7 +86,7 @@ func TestRegisterUserUseCase(t *testing.T) {
 }
 
 func TestLoginUserUseCase(t *testing.T) {
-	dep := setup(t)
+	dep := setupUserUseCase(t)
 
 	ctx := context.TODO()
 

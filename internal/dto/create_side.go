@@ -4,9 +4,9 @@ import "github.com/google/uuid"
 
 type CreateSideRequest struct {
 	UserID uuid.UUID
-	Name string
+	Name string	`json:"name"`
 }
 
 type CreateSideResponse struct {
-	ID uuid.UUID
+	SideID uuid.UUID	`json:"side_id"`
 }

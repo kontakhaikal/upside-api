@@ -13,7 +13,7 @@ type MembershipRepository[T any] interface {
 	FindBySideIDAndUserID(ctx Context[T], sideID uuid.UUID, userID uuid.UUID) (*entity.Membership, error)
 }
 
-type GormMembershipRepository struct {}
+type GormMembershipRepository struct{}
 
 func (g *GormMembershipRepository) Save(ctx Context[*gorm.DB], membership *entity.Membership) (*entity.Membership, error) {
 	if err := ctx.Executor().Save(membership).Error; err != nil {

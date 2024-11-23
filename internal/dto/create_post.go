@@ -3,8 +3,8 @@ package dto
 import "github.com/google/uuid"
 
 type CreatePostRequest struct {
-	Body string
-	SideID uuid.UUID
+	Body     string
+	SideID   uuid.UUID
 	AuthorID uuid.UUID
 }
 

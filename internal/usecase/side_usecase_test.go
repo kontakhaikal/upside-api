@@ -18,10 +18,10 @@ import (
 )
 
 type sideUseCaseDep struct {
-	sideRepo repository.SideRepository[*gorm.DB]
+	sideRepo      repository.SideRepository[*gorm.DB]
 	membershipRep repository.MembershipRepository[*gorm.DB]
-	ctxManager repository.ContextManager[*gorm.DB]
-	useCase usecase.SideUseCase
+	ctxManager    repository.ContextManager[*gorm.DB]
+	useCase       usecase.SideUseCase
 }
 
 func setupSideUseCase(t *testing.T) *sideUseCaseDep {
@@ -30,7 +30,7 @@ func setupSideUseCase(t *testing.T) *sideUseCaseDep {
 	})
 
 	if err != nil {
-		t.Fatalf("database connection error: %+v",err)
+		t.Fatalf("database connection error: %+v", err)
 	}
 
 	if err = db.AutoMigrate(&entity.Side{}, &entity.Membership{}); err != nil {

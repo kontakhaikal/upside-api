@@ -5,7 +5,6 @@ type LoginUserRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
-
 type LoginUserResponse struct {
 	CredentialToken CredentialToken `json:"credential_token"`
 }

@@ -8,5 +8,5 @@ type JoinSideRequest struct {
 }
 
 type JoinSideResponse struct {
-	MembershipID uuid.UUID	`json:"membership_id"`
+	MembershipID uuid.UUID `json:"membership_id"`
 }

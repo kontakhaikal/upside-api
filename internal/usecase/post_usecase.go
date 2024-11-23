@@ -18,11 +18,11 @@ type PostUseCase interface {
 }
 
 type PostUseCaseImpl struct {
-	validator util.Validator
-	postRepository repository.PostRepository[*gorm.DB]
+	validator        util.Validator
+	postRepository   repository.PostRepository[*gorm.DB]
 	memberRepository repository.MembershipRepository[*gorm.DB]
-	sideRepository repository.SideRepository[*gorm.DB]
-	contextManager repository.ContextManager[*gorm.DB]
+	sideRepository   repository.SideRepository[*gorm.DB]
+	contextManager   repository.ContextManager[*gorm.DB]
 }
 
 func (p *PostUseCaseImpl) Create(ctx context.Context, req *dto.CreatePostRequest) (*dto.CreatePostResponse, error) {
@@ -42,7 +42,7 @@ func (p *PostUseCaseImpl) Create(ctx context.Context, req *dto.CreatePostRequest
 		return nil, errors.ErrSideNotFound
 	}
 
-	membership, err  := p.memberRepository.FindBySideIDAndUserID(repoCtx, side.ID, req.AuthorID)
+	membership, err := p.memberRepository.FindBySideIDAndUserID(repoCtx, side.ID, req.AuthorID)
 
 	if err != nil {
 		return nil, err
@@ -53,12 +53,12 @@ func (p *PostUseCaseImpl) Create(ctx context.Context, req *dto.CreatePostRequest
 	}
 
 	post := &entity.Post{
-		ID: uuid.New(),
-		Body: req.Body,
-		CreatedAt: time.Now(),
+		ID:          uuid.New(),
+		Body:        req.Body,
+		CreatedAt:   time.Now(),
 		LastUpdated: time.Now(),
-		AuthorID: req.AuthorID,
-		SideID: side.ID,
+		AuthorID:    req.AuthorID,
+		SideID:      side.ID,
 	}
 
 	post, err = p.postRepository.Save(repoCtx, post)

@@ -12,17 +12,16 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type SideUseCase interface {
 	Create(ctx context.Context, req *dto.CreateSideRequest) (*dto.CreateSideResponse, error)
 	Join(ctx context.Context, req *dto.JoinSideRequest) (*dto.JoinSideResponse, error)
 }
 
 type SideUseCaseImpl struct {
-	validator util.Validator
-	sideRepository repository.SideRepository[*gorm.DB]
+	validator            util.Validator
+	sideRepository       repository.SideRepository[*gorm.DB]
 	membershipRepository repository.MembershipRepository[*gorm.DB]
-	contextManager repository.ContextManager[*gorm.DB]
+	contextManager       repository.ContextManager[*gorm.DB]
 }
 
 func (s *SideUseCaseImpl) Create(ctx context.Context, req *dto.CreateSideRequest) (*dto.CreateSideResponse, error) {
@@ -31,13 +30,11 @@ func (s *SideUseCaseImpl) Create(ctx context.Context, req *dto.CreateSideRequest
 	}
 
 	side := &entity.Side{
-		ID: uuid.New(),
+		ID:   uuid.New(),
 		Name: req.Name,
 	}
 
 	repoCtx := s.contextManager.WithTx(ctx)
-
-	defer repoCtx.Rollback()
 
 	side, err := s.sideRepository.Save(repoCtx, side)
 
@@ -46,13 +43,13 @@ func (s *SideUseCaseImpl) Create(ctx context.Context, req *dto.CreateSideRequest
 	}
 
 	membership := &entity.Membership{
-		ID: uuid.New(),
+		ID:     uuid.New(),
 		UserID: req.UserID,
 		SideID: side.ID,
-		Role: entity.Author,
+		Role:   entity.Author,
 	}
 
-	membership, err = s.membershipRepository.Save(repoCtx, membership)
+	_, err = s.membershipRepository.Save(repoCtx, membership)
 
 	if err != nil {
 		return nil, err
@@ -75,7 +72,7 @@ func (s *SideUseCaseImpl) Join(ctx context.Context, req *dto.JoinSideRequest) (*
 	repoCtx := s.contextManager.WithoutTx(ctx)
 
 	side, err := s.sideRepository.FindByID(repoCtx, req.SideID)
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -95,10 +92,10 @@ func (s *SideUseCaseImpl) Join(ctx context.Context, req *dto.JoinSideRequest) (*
 	}
 
 	membership = &entity.Membership{
-		ID: uuid.New(),
+		ID:     uuid.New(),
 		UserID: req.UserID,
 		SideID: side.ID,
-		Role: entity.Member,
+		Role:   entity.Member,
 	}
 
 	membership, err = s.membershipRepository.Save(repoCtx, membership)
@@ -122,4 +119,4 @@ func NewSideUseCase(
 		membershipRepository,
 		contextManager,
 	}
-} 
+}

@@ -13,7 +13,6 @@ type Context[T any] interface {
 
 type TxContext[T any] interface {
 	Context[T]
-	Executor() T
 	Commit() error
 	Rollback() error
 }

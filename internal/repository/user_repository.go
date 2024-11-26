@@ -41,7 +41,7 @@ func (g *GormUserRepository) Save(ctx Context[*gorm.DB], user *entity.User) (*en
 func (g *GormUserRepository) FindByUsername(ctx Context[*gorm.DB], username string) (*entity.User, error) {
 	user := new(entity.User)
 
-	err := ctx.Executor().First(&user, "username = ?", username).Error
+	err := ctx.Executor().First(user, "username = ?", username).Error
 
 	if err == nil {
 		return user, nil
